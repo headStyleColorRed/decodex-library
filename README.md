@@ -65,81 +65,80 @@ import DecodexCore
 let envelope = FrameEnvelope(
     sid: UUID(),
     seq: 1,
-    type: .data,
     bufferable: true,
     body: "base64EncodedData"
 )
 
-// Validate the envelope
-let result = envelope.validate(for: sessionID)
-if result.isValid {
-    // Process the message
-} else {
-    print("Validation error: \(result.errorMessage ?? "Unknown error")")
-}
+// Access envelope properties
+print("Session ID: \(envelope.sid)")
+print("Sequence: \(envelope.seq)")
+print("Bufferable: \(envelope.bufferable)")
+print("Body: \(envelope.body)")
 ```
 
-### Wire Protocol
+### Control Messages
 
 ```swift
 import DecodexCore
 
 // Create control messages
-let pingMessage = ControlMessage.ping
-let statusMessage = ControlMessage.sessionStatus(
-    SessionStatus(state: "connected", message: "Session established")
-)
+let controlMessage = ControlMessage(dataB64: "base64EncodedControlData")
 
-// Create wire protocol envelope
-let wireEnvelope = Envelope(
-    sid: "session-id",
-    seq: 1,
-    type: .control,
-    buf: .text,
-    body: "encryptedControlData"
-)
+// Access control message data
+print("Control data: \(controlMessage.dataB64)")
 ```
 
-### Processing Frames
+### Resize Messages
 
 ```swift
 import DecodexCore
 
-// Handle frame processing results
-switch frameProcessingResult {
-case .success(let controlMessage):
-    // Handle control message
-    break
-case .consoleData(let data):
-    // Handle console data
-    break
-case .invalidSequence(let expected, let received):
-    print("Sequence mismatch: expected \(expected), received \(received)")
-case .cryptoError:
-    print("Encryption/decryption failed")
-case .malformedFrame:
-    print("Frame format is invalid")
-case .unknownMessageType:
-    print("Unknown message type received")
-}
+// Create resize messages for terminal resizing
+let resizeMessage = ResizeMessage(cols: 80, rows: 24)
+
+// Access resize properties
+print("Columns: \(resizeMessage.cols)")
+print("Rows: \(resizeMessage.rows)")
+```
+
+### Working with Base64 Data
+
+```swift
+import DecodexCore
+
+// Base64 is a type alias for String
+let base64Data: Base64 = "SGVsbG8gV29ybGQ="
+
+// Use with frame envelopes
+let envelope = FrameEnvelope(
+    sid: UUID(),
+    seq: 1,
+    bufferable: true,
+    body: base64Data
+)
+
+// Use with control messages
+let controlMessage = ControlMessage(dataB64: base64Data)
 ```
 
 ## Architecture
 
 ### Core Models
 
-- **`ConnectionRole`**: Defines desktop and controller connection types
-- **`FrameEnvelope`**: Message framing with session ID, sequence numbers, and encryption
-- **`Envelope`**: Wire protocol envelope for WebSocket communication
-- **`ControlMessage`**: Typed control messages for session management
+- **`ConnectionRole`**: Enum defining desktop and controller connection types with opposite role functionality
+- **`FrameEnvelope`**: Message framing structure with session ID (UUID), sequence numbers (UInt64), bufferable flag, and Base64 body
+- **`ControlMessage`**: Simple control message structure containing Base64-encoded data
+- **`ResizeMessage`**: Terminal resize message with columns and rows (UInt16)
+- **`Base64`**: Type alias for String used for encoded data
 
 ### Protocol Features
 
 - **Session Management**: UUID-based session identification
-- **Sequence Numbers**: Ordered message delivery with sequence validation
-- **Encryption Support**: Base64-encoded encrypted message bodies
-- **Buffer Types**: Support for both binary and text data
-- **Error Handling**: Comprehensive error reporting and validation
+- **Sequence Numbers**: Ordered message delivery with UInt64 sequence numbers
+- **Data Encoding**: Base64-encoded message bodies for secure transmission
+- **Bufferable Messages**: Support for buffering messages when needed
+- **Terminal Resizing**: Built-in support for terminal dimension changes
+- **Type Safety**: All models conform to Codable and Sendable protocols
 
 ## Development
 
