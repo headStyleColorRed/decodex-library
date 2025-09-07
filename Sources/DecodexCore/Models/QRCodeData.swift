@@ -10,6 +10,7 @@ import Foundation
 public struct QRCodeData: Codable, Equatable, Identifiable {
     public let sid: String
     public let sessionKey: Base64
+    public var id: String { sid }
 
     public init(sid: String, sessionKey: Base64) {
         self.sid = sid
