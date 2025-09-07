@@ -24,7 +24,7 @@ Add DecodexCore to your `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/your-org/decodex-library.git", branch: "main")
+    .package(url: "https://github.com/headStyleColorRed/decodex-library.git", branch: "main")
 ]
 ```
 
@@ -32,10 +32,12 @@ Then add it to your target:
 
 ```swift
 targets: [
-    .target(
-        name: "YourTarget",
-        dependencies: ["DecodexCore"]
-    )
+    .executableTarget(
+        name: "your-project", // Replace with your target name
+        dependencies: [
+            .product(name: "DecodexCore", package: "decodex-library")
+        ],
+        path: "Sources")
 ]
 ```
 
