@@ -11,6 +11,7 @@ public struct FrameEnvelope: Codable, Sendable {
     public enum FrameType: String, Codable, Sendable {
         case data = "data"
         case control = "control"
+        case ping = "ping"
     }
 
     public init(sid: UUID, seq: UInt64, type: FrameType, bufferable: Bool, body: String) {
