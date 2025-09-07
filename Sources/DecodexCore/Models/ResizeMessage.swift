@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ResizeMessage: Codable {
-    let cols: UInt16
-    let rows: UInt16
+public struct ResizeMessage: Codable {
+    public let cols: UInt16
+    public let rows: UInt16
 }
