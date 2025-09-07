@@ -5,8 +5,8 @@
 //  Created by Rodrigo Labrador Serrano on 7/9/25.
 //
 
-struct QRCodeData: Codable {
-    let sid: String
-    let relayURL: String
-    let sessionKey: Base64
+public struct QRCodeData: Codable {
+    public let sid: String
+    public let relayURL: String
+    public let sessionKey: Base64
 }
