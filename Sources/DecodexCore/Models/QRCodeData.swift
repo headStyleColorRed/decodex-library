@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct QRCodeData: Codable {
+public struct QRCodeData: Codable, Equatable {
     public let sid: String
     public let sessionKey: Base64
 
