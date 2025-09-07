@@ -18,7 +18,7 @@ public struct QRCodeData: Codable {
         self.sessionKey = sessionKey
     }
 
-    public func toJSON() throws -> String? {
+    public func toJSON() throws -> String {
         let json = try JSONEncoder().encode(self)
         guard let data = String(data: json, encoding: .utf8) else {
             throw NSError(domain: "QRCodeData", code: 2, userInfo: [NSLocalizedDescriptionKey: "Failed to encode JSON"])
