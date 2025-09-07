@@ -9,12 +9,10 @@ import Foundation
 
 public struct QRCodeData: Codable {
     public let sid: String
-    public let relayURL: String
     public let sessionKey: Base64
 
-    public init(sid: String, relayURL: String, sessionKey: Base64) {
+    public init(sid: String, sessionKey: Base64) {
         self.sid = sid
-        self.relayURL = relayURL
         self.sessionKey = sessionKey
     }
 
