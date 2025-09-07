@@ -6,14 +6,8 @@ import Foundation
 // MARK: - Library Information
 public struct DecodexCore {
     /// The version of the DecodexCore library
-    public static let version = "1.0.0"
+    public static let version = "0.0.1"
 
     /// Library description
     public static let description = "Core types and protocols for Decodex communication"
 }
-
-// All public types from the Models directory are automatically available:
-// - ConnectionRole
-// - FrameEnvelope
-// - Envelope
-// - ValidationResult

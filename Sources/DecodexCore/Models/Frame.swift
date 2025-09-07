@@ -1,7 +1,5 @@
 import Foundation
 
-public typealias Base64 = String
-
 /// Message framing structure for relayed messages
 public struct Frame: Codable, Sendable {
     public let sid: UUID
