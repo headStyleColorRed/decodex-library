@@ -3,7 +3,7 @@ import Foundation
 public typealias Base64 = String
 
 /// Message framing structure for relayed messages
-public struct FrameEnvelope: Codable, Sendable {
+public struct Frame: Codable, Sendable {
     public let sid: UUID
     public let seq: UInt64
     public let bufferable: Bool
