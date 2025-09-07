@@ -18,7 +18,7 @@ build: ## Build the project
 	@echo "$(GREEN)Build completed$(NC)"
 
 .PHONY: run
-run: ## Run the project
+run: build
 	@echo "$(BLUE)Running $(PROJECT_NAME)...$(NC)"
 	swift run
 	@echo "$(GREEN)Project stopped$(NC)"

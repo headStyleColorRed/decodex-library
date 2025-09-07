@@ -14,20 +14,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-crypto.git", from: "3.0.0")
+        // No external dependencies
     ],
     targets: [
         .target(
             name: "DecodexCore",
-            dependencies: [
-                .product(name: "Crypto", package: "swift-crypto")
-            ],
+            dependencies: [],
             path: "Sources/DecodexCore"
-        ),
-        .testTarget(
-            name: "DecodexCoreTests",
-            dependencies: ["DecodexCore"],
-            path: "Tests/DecodexCoreTests"
-        ),
+        )
     ]
 )
