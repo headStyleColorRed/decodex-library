@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct QRCodeData: Codable, Equatable, Identifiable {
+public struct QRCodeData: Codable, Equatable, Identifiable, Hashable {
     public let sid: String
     public let sessionKey: Base64
     public var id: String { sid }
@@ -30,5 +30,9 @@ public struct QRCodeData: Codable, Equatable, Identifiable {
             throw NSError(domain: "QRCodeData", code: 1, userInfo: [NSLocalizedDescriptionKey: "Invalid JSON string"])
         }
         return try JSONDecoder().decode(QRCodeData.self, from: data)
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(sid)
     }
 }
