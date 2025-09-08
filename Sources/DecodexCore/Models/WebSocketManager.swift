@@ -28,13 +28,13 @@ class WebSocketManager: ObservableObject {
 
     var delegate: WebSocketManagerDelegate?
 
-    init(config: WebSocketConfig, qrCodeData: QRCodeData) {
+    public init(config: WebSocketConfig, qrCodeData: QRCodeData) {
         self.config = config
         self.qrCodeData = qrCodeData
         self.connectionStatus = .disconnected
     }
 
-    func connect() async {
+    public func connect() async {
         guard connectionStatus == .disconnected else { return }
 
         connectionStatus = .connecting
@@ -72,7 +72,7 @@ class WebSocketManager: ObservableObject {
         }
     }
 
-    func disconnect() async {
+    public func disconnect() async {
         guard let ws = webSocket else { return }
 
         do {
@@ -119,7 +119,7 @@ class WebSocketManager: ObservableObject {
     }
 
     // MARK: - Sending Messages
-    func sendMessage(_ data: Data) {
+    public func sendBinaryMessage(_ data: Data) {
         guard let ws = webSocket, connectionStatus != .disconnected else {
             print("Not connected to server")
             return
@@ -132,5 +132,16 @@ class WebSocketManager: ObservableObject {
         // Send as binary data
         ws.send(buffer)
         print("Message sent successfully")
+    }
+
+    public func sendTextMessage(_ text: String) {
+        guard let ws = webSocket, connectionStatus != .disconnected else {
+            print("Not connected to server")
+            return
+        }
+
+        // Send as text message
+        ws.send(text)
+        print("Text message sent successfully")
     }
 }
