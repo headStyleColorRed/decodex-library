@@ -10,7 +10,7 @@ import WebSocketKit
 import NIOCore
 import NIOPosix
 
-protocol WebSocketManagerDelegate {
+public protocol WebSocketManagerDelegate {
     func onMessageReceived(_ message: String)
     func onBinaryMessageReceived(_ message: Data)
     func onDisconnected()
@@ -26,7 +26,7 @@ public class WebSocketManager: ObservableObject {
     private let qrCodeData: QRCodeData
 
 
-    private var delegate: WebSocketManagerDelegate?
+    private var delegate: WebSocketManagerDelegate
 
     public init(config: WebSocketConfig, qrCodeData: QRCodeData, delegate: WebSocketManagerDelegate) {
         self.config = config
@@ -97,7 +97,7 @@ public class WebSocketManager: ObservableObject {
         ws.onText { [weak self] _, text in
             Task { @MainActor in
                 print("Received text message: \(text)")
-                self?.delegate?.onMessageReceived(text)
+                self?.delegate.onMessageReceived(text)
             }
         }
 
@@ -106,7 +106,7 @@ public class WebSocketManager: ObservableObject {
                 print("Received binary message: \(data.readableBytes) bytes")
                 // Convert ByteBuffer to Data
                 let messageData = Data(buffer: data)
-                self?.delegate?.onBinaryMessageReceived(messageData)
+                self?.delegate.onBinaryMessageReceived(messageData)
             }
         }
 
@@ -114,7 +114,7 @@ public class WebSocketManager: ObservableObject {
             Task { @MainActor in
                 self?.connectionStatus = .disconnected
                 print("WebSocket connection closed")
-                self?.delegate?.onDisconnected()
+                self?.delegate.onDisconnected()
             }
         }
     }
