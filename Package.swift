@@ -14,12 +14,14 @@ let package = Package(
         ),
     ],
     dependencies: [
-        // No external dependencies
+        .package(url: "https://github.com/vapor/websocket-kit.git", from: "2.0.0")
     ],
     targets: [
         .target(
             name: "DecodexCore",
-            dependencies: [],
+            dependencies: [
+                .product(name: "WebSocketKit", package: "websocket-kit")
+            ],
             path: "Sources/DecodexCore"
         )
     ]
