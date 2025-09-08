@@ -11,10 +11,12 @@ public struct QRCodeData: Codable, Equatable, Identifiable, Hashable {
     public let sid: String
     public let sessionKey: Base64
     public var id: String { sid }
+    public var role: ConnectionRole
 
-    public init(sid: String, sessionKey: Base64) {
+    public init(sid: String, sessionKey: Base64, role: ConnectionRole) {
         self.sid = sid
         self.sessionKey = sessionKey
+        self.role = role
     }
 
     public func toJSON() throws -> String {
