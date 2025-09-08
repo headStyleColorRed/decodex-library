@@ -17,7 +17,7 @@ protocol WebSocketManagerDelegate {
 }
 
 @MainActor
-class WebSocketManager: ObservableObject {
+public class WebSocketManager: ObservableObject {
     @Published var connectionStatus: ConnectionStatus
 
     private var webSocket: WebSocket?
@@ -26,12 +26,13 @@ class WebSocketManager: ObservableObject {
     private let qrCodeData: QRCodeData
 
 
-    var delegate: WebSocketManagerDelegate?
+    private var delegate: WebSocketManagerDelegate?
 
-    public init(config: WebSocketConfig, qrCodeData: QRCodeData) {
+    public init(config: WebSocketConfig, qrCodeData: QRCodeData, delegate: WebSocketManagerDelegate) {
         self.config = config
         self.qrCodeData = qrCodeData
         self.connectionStatus = .disconnected
+        self.delegate = delegate
     }
 
     public func connect() async {
