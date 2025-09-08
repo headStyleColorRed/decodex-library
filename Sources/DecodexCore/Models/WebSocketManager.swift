@@ -11,6 +11,7 @@ import NIOCore
 import NIOPosix
 
 public protocol WebSocketManagerDelegate {
+    func connectionStatusChanged(_ status: ConnectionStatus)
     func onMessageReceived(_ message: String)
     func onBinaryMessageReceived(_ message: Data)
     func onDisconnected()
@@ -18,27 +19,25 @@ public protocol WebSocketManagerDelegate {
 
 @MainActor
 public class WebSocketManager: ObservableObject {
-    @Published var connectionStatus: ConnectionStatus
-
     private var webSocket: WebSocket?
     private var eventLoopGroup: EventLoopGroup?
-    private let config: WebSocketConfig
-    private let qrCodeData: QRCodeData
+    private var config: WebSocketConfig
+    private var qrCodeData: QRCodeData
+    private var connectionStatus: ConnectionStatus
 
 
-    private var delegate: WebSocketManagerDelegate
+    public var delegate: WebSocketManagerDelegate?
 
-    public init(config: WebSocketConfig, qrCodeData: QRCodeData, delegate: WebSocketManagerDelegate) {
+    public init(config: WebSocketConfig, qrCodeData: QRCodeData) {
         self.config = config
         self.qrCodeData = qrCodeData
         self.connectionStatus = .disconnected
-        self.delegate = delegate
     }
 
     public func connect() async {
         guard connectionStatus == .disconnected else { return }
 
-        connectionStatus = .connecting
+        updateConnectionStatus(.connecting)
 
         // Create event loop group
         eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
@@ -48,7 +47,7 @@ public class WebSocketManager: ObservableObject {
         let urlString = config.endpoint(data: qrCodeData)
 
         guard let url = URL(string: urlString) else {
-            connectionStatus = .disconnected
+            updateConnectionStatus(.disconnected)
             return
         }
 
@@ -63,12 +62,12 @@ public class WebSocketManager: ObservableObject {
         do {
             let ws = try await promise.futureResult.get()
             webSocket = ws
-            connectionStatus = .connected
+            updateConnectionStatus(.connected)
             print("Connected to Decodex server with session: \(qrCodeData.sid)")
             handleConnection(ws)
         } catch {
             print("Failed to connect: \(error)")
-            connectionStatus = .disconnected
+            updateConnectionStatus(.disconnected)
             await disconnect()
         }
     }
@@ -83,7 +82,7 @@ public class WebSocketManager: ObservableObject {
         }
 
         webSocket = nil
-        connectionStatus = .disconnected
+        updateConnectionStatus(.disconnected)
 
         // Shutdown event loop group
         try? await eventLoopGroup?.shutdownGracefully()
@@ -97,7 +96,7 @@ public class WebSocketManager: ObservableObject {
         ws.onText { [weak self] _, text in
             Task { @MainActor in
                 print("Received text message: \(text)")
-                self?.delegate.onMessageReceived(text)
+                self?.delegate?.onMessageReceived(text)
             }
         }
 
@@ -106,22 +105,22 @@ public class WebSocketManager: ObservableObject {
                 print("Received binary message: \(data.readableBytes) bytes")
                 // Convert ByteBuffer to Data
                 let messageData = Data(buffer: data)
-                self?.delegate.onBinaryMessageReceived(messageData)
+                self?.delegate?.onBinaryMessageReceived(messageData)
             }
         }
 
         ws.onClose.whenComplete { [weak self] result in
             Task { @MainActor in
-                self?.connectionStatus = .disconnected
+                self?.updateConnectionStatus(.disconnected)
                 print("WebSocket connection closed")
-                self?.delegate.onDisconnected()
+                self?.delegate?.onDisconnected()
             }
         }
     }
 
     // MARK: - Sending Messages
     public func sendBinaryMessage(_ data: Data) {
-        guard let ws = webSocket, connectionStatus != .disconnected else {
+        guard let ws = webSocket, self.connectionStatus != .disconnected else {
             print("Not connected to server")
             return
         }
@@ -136,7 +135,7 @@ public class WebSocketManager: ObservableObject {
     }
 
     public func sendTextMessage(_ text: String) {
-        guard let ws = webSocket, connectionStatus != .disconnected else {
+        guard let ws = webSocket, self.connectionStatus != .disconnected else {
             print("Not connected to server")
             return
         }
@@ -144,5 +143,12 @@ public class WebSocketManager: ObservableObject {
         // Send as text message
         ws.send(text)
         print("Text message sent successfully")
+    }
+
+    private func updateConnectionStatus(_ status: ConnectionStatus) {
+        Task { @MainActor in
+            self.connectionStatus = status
+            self.delegate?.connectionStatusChanged(status)
+        }
     }
 }
