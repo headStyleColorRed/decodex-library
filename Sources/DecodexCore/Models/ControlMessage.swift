@@ -7,6 +7,6 @@
 
 import Foundation
 
-public struct ControlMessage: Codable {
-    public let dataB64: Base64
-}
+//public struct ControlMessage: Codable {
+//    public let data: String
+//}
