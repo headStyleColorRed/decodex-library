@@ -91,8 +91,12 @@ public enum SenderData: Codable {
 
 public struct Message: Codable {
     let data: SenderData
-    
-    var content: String? {
+
+    public init(data: SenderData) {
+        self.data = data
+    }
+
+    public var content: String? {
         switch data {
         case .controller(let message):
             switch message {
