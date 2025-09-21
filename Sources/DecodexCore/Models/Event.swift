@@ -90,7 +90,7 @@ public enum SenderData: Codable {
 }
 
 public struct Message: Codable {
-    let data: SenderData
+    public let data: SenderData
 
     public init(data: SenderData) {
         self.data = data
