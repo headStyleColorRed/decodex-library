@@ -14,11 +14,13 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(url: "https://github.com/tristanhimmelman/ObjectMapper.git", .upToNextMajor(from: "4.1.0"))
     ],
     targets: [
         .target(
             name: "DecodexCore",
             dependencies: [
+                .product(name: "ObjectMapper", package: "ObjectMapper")
             ],
             path: "Sources/DecodexCore"
         )

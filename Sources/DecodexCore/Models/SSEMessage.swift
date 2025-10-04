@@ -7,7 +7,6 @@
 
 import Foundation
 import ObjectMapper
-import DecodexCore
 
 public struct SSEMessage: Mappable {
     public var messageId: String?

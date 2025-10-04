@@ -1,0 +1,15 @@
+{
+  "originHash" : "bb50fb1f1f620170553b91439ca4c36777cf8490f4aec88bfd229cbeb22c5007",
+  "pins" : [
+    {
+      "identity" : "objectmapper",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tristanhimmelman/ObjectMapper.git",
+      "state" : {
+        "revision" : "6021c6035e83a306047348666f6400dc61445d3b",
+        "version" : "4.4.3"
+      }
+    }
+  ],
+  "version" : 3
+}
