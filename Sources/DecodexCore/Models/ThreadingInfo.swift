@@ -1,14 +1,11 @@
 //
-//  SSEEventMapper.swift
+//  ThreadingInfo.swift
 //  decodex-cli
 //
 //  Created by Rodrigo Labrador Serrano on 6/9/25.
 //
 
 import Foundation
-import DecodexCore
-
-// MARK: - Threading Information
 
 public struct ThreadingInfo {
     public let taskId: String?

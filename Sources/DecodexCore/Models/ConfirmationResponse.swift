@@ -9,10 +9,16 @@ import Foundation
 
 public struct ConfirmationResponse: Codable, Sendable {
     public let callId: String
-    public let outcome: String
+    public let outcome: ConfirmationOutcome
 
-    public init(callId: String, outcome: String) {
+    public init(callId: String, outcome: ConfirmationOutcome) {
         self.callId = callId
         self.outcome = outcome
     }
+}
+
+public enum ConfirmationOutcome: String, Codable, Sendable {
+    case once = "proceed_once"
+    case always = "proceed_always"
+    case cancel = "cancel"
 }
