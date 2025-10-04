@@ -16,7 +16,7 @@ public enum Model: String, CaseIterable, Codable, Sendable {
 
 public enum CLIEvent: Equatable, Codable {
     case none
-    // Session
+    case loading(String)                    // Loading
     case launching                          // Launching the llm process
     case authorizing                     	// Authorizing
     case event(SSESignal)                   // Event
@@ -91,6 +91,8 @@ public struct Message: Codable {
                 return "Current Directory: \(string)"
             case .error(let string):
                 return "Error: \(string)"
+            case .loading(let string):
+                return "Loading: \(string)"
             }
         }
     }
