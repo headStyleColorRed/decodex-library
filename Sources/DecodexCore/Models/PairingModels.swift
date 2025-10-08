@@ -43,13 +43,15 @@ public struct PairingQRData: Codable {
     public let deskPub: String // Base64(DeskKey.public)
     public let token: PairToken // Base64(PairToken)
     public let exp: String // ISO8601 expiration
+    public let desktopName: String
 
-    public init(relay: RelayURL, device: DeviceID, deskPub: String, token: PairToken, exp: String) {
+    public init(relay: RelayURL, device: DeviceID, deskPub: String, token: PairToken, exp: String, desktopName: String) {
         self.relay = relay
         self.device = device
         self.deskPub = deskPub
         self.token = token
         self.exp = exp
+        self.desktopName = desktopName
     }
 
     public func toJSON() throws -> String {
@@ -130,12 +132,14 @@ public struct DeviceConfig: Codable {
     public let relayUrl: RelayURL
     public let createdAt: String
     public let keyFingerprint: String
+    public let desktopName: String
 
-    public init(deviceId: DeviceID, relayUrl: RelayURL, createdAt: String, keyFingerprint: String) {
+    public init(deviceId: DeviceID, relayUrl: RelayURL, createdAt: String, keyFingerprint: String, desktopName: String) {
         self.deviceId = deviceId
         self.relayUrl = relayUrl
         self.createdAt = createdAt
         self.keyFingerprint = keyFingerprint
+        self.desktopName = desktopName
     }
 }
 
