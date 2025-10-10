@@ -8,7 +8,7 @@
 import Foundation
 import ObjectMapper
 
-public struct SSEMessage: Mappable {
+public struct SSEMessage: Mappable, Sendable {
     public var messageId: String?
     public var parts: [Part] = []
 
@@ -43,11 +43,11 @@ public struct SSEMessage: Mappable {
         }
     }
 
-    public enum Part {
+    public enum Part: Sendable {
         case text(String)
         case confirmation(ConfirmationKind, String, [String:String], String?)
 
-        public enum ConfirmationKind { case exec, edit }
+        public enum ConfirmationKind: Sendable { case exec, edit }
 
         public static func from(map: Map, idx: Int) -> Part? {
             var kind: String?

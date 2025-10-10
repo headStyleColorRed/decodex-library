@@ -8,7 +8,7 @@
 import Foundation
 import ObjectMapper
 
-public struct SSEEvent: Mappable {
+public struct SSEEvent: Mappable, Sendable {
     // External
     public var id: String?
     public var event: String?
@@ -35,12 +35,12 @@ public struct SSEEvent: Mappable {
         return responseIsFinished == false && asSignal.phase == .needInput
     }
 
-    public enum Kind: String {
+    public enum Kind: String, Sendable {
         case task = "task"
         case statusUpdate = "status-update"
     }
 
-    public enum StatusState: String {
+    public enum StatusState: String, Sendable {
         case submitted       = "submitted"
         case working         = "working"
         case inputRequired   = "input-required"
