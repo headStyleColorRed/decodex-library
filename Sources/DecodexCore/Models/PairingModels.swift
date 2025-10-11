@@ -25,28 +25,17 @@ public struct DeskKey: Codable {
     }
 }
 
-/// One-time pairing token
-public typealias PairToken = String
-
-/// Controller public key
-public typealias ControllerPub = String
-
-/// Relay endpoint URL
-public typealias RelayURL = String
-
 // MARK: - Pairing QR Code
 
 public struct PairingQRData: Codable {
     public let kind: String = "codec-pairing"
-    public let relay: RelayURL
     public let device: DeviceID
     public let deskPub: String // Base64(DeskKey.public)
-    public let token: PairToken // Base64(PairToken)
+    public let token: String // Base64(String)
     public let exp: String // ISO8601 expiration
     public let desktopName: String
 
-    public init(relay: RelayURL, device: DeviceID, deskPub: String, token: PairToken, exp: String, desktopName: String) {
-        self.relay = relay
+    public init(device: DeviceID, deskPub: String, token: String, exp: String, desktopName: String) {
         self.device = device
         self.deskPub = deskPub
         self.token = token
@@ -75,11 +64,11 @@ public struct PairingQRData: Codable {
 public struct PairRequest: Codable {
     public let kind: String = "pair_request"
     public let device: DeviceID
-    public let token: PairToken
-    public let controllerPub: ControllerPub
+    public let token: String
+    public let controllerPub: String
     public let controllerLabel: String?
 
-    public init(device: DeviceID, token: PairToken, controllerPub: ControllerPub, controllerLabel: String? = nil) {
+    public init(device: DeviceID, token: String, controllerPub: String, controllerLabel: String? = nil) {
         self.device = device
         self.token = token
         self.controllerPub = controllerPub
@@ -111,12 +100,12 @@ public enum PairingState: String, Codable {
 
 public struct ControllerRecord: Codable {
     public let controllerId: String
-    public let controllerPub: ControllerPub
+    public let controllerPub: String
     public let label: String
     public let addedAt: String
     public let revoked: Bool
 
-    public init(controllerId: String, controllerPub: ControllerPub, label: String, addedAt: String, revoked: Bool = false) {
+    public init(controllerId: String, controllerPub: String, label: String, addedAt: String, revoked: Bool = false) {
         self.controllerId = controllerId
         self.controllerPub = controllerPub
         self.label = label
@@ -129,14 +118,12 @@ public struct ControllerRecord: Codable {
 
 public struct DeviceConfig: Codable {
     public let deviceId: DeviceID
-    public let relayUrl: RelayURL
     public let createdAt: String
     public let keyFingerprint: String
     public let desktopName: String
 
-    public init(deviceId: DeviceID, relayUrl: RelayURL, createdAt: String, keyFingerprint: String, desktopName: String) {
+    public init(deviceId: DeviceID, createdAt: String, keyFingerprint: String, desktopName: String) {
         self.deviceId = deviceId
-        self.relayUrl = relayUrl
         self.createdAt = createdAt
         self.keyFingerprint = keyFingerprint
         self.desktopName = desktopName
