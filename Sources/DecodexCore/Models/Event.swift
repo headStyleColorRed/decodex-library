@@ -46,7 +46,7 @@ public enum CLIEvent: Equatable, Codable {
     }
 }
 
-public enum ControlMessage: Codable {
+public enum ControlMessage: Codable, Sendable {
     case message(String)
     case confirmation(ConfirmationResponse)
     case pairRequest(PairRequest)

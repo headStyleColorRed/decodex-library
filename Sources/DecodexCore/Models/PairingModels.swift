@@ -9,9 +9,6 @@ import Foundation
 
 // MARK: - Simple Pairing Terminology
 
-/// Stable random ID for this desktop install (UUIDv4)
-public typealias DeviceID = String
-
 /// Simple desktop keypair - just strings for now
 public struct DeskKey: Codable {
     public let publicKey: String
@@ -29,18 +26,22 @@ public struct DeskKey: Codable {
 
 public struct PairingQRData: Codable {
     public let kind: String = "codec-pairing"
-    public let device: DeviceID
-    public let deskPub: String // Base64(DeskKey.public)
-    public let token: String // Base64(String)
-    public let exp: String // ISO8601 expiration
+    public let desktopID: String
+    public let desktopPublicKey: String
     public let desktopName: String
+    public let oneTimePairingToken: String
+    public let expiration: String
 
-    public init(device: DeviceID, deskPub: String, token: String, exp: String, desktopName: String) {
-        self.device = device
-        self.deskPub = deskPub
-        self.token = token
-        self.exp = exp
+    public init(desktopID: String,
+                desktopPublicKey: String,
+                desktopName: String,
+                oneTimePairingToken: String,
+                expiration: String) {
+        self.desktopID = desktopID
+        self.desktopPublicKey = desktopPublicKey
         self.desktopName = desktopName
+        self.oneTimePairingToken = oneTimePairingToken
+        self.expiration = expiration
     }
 
     public func toJSON() throws -> String {
@@ -61,14 +62,14 @@ public struct PairingQRData: Codable {
 
 // MARK: - Simple Pairing Messages
 
-public struct PairRequest: Codable {
-    public let kind: String = "pair_request"
-    public let device: DeviceID
+public struct PairRequest: Codable, Sendable {
+    public var kind: String = "pair_request"
+    public let device: String
     public let token: String
     public let controllerPub: String
     public let controllerLabel: String?
 
-    public init(device: DeviceID, token: String, controllerPub: String, controllerLabel: String? = nil) {
+    public init(device: String, token: String, controllerPub: String, controllerLabel: String? = nil) {
         self.device = device
         self.token = token
         self.controllerPub = controllerPub
@@ -77,11 +78,14 @@ public struct PairRequest: Codable {
 }
 
 public struct PairResult: Codable {
-    public let kind: String = "pair_result"
+    public let sid: String
+    public let kind: String
     public let success: Bool
     public let error: String?
 
-    public init(success: Bool, error: String? = nil) {
+    public init(sid: String, kind: String, success: Bool, error: String? = nil) {
+        self.sid = sid
+        self.kind = kind
         self.success = success
         self.error = error
     }
@@ -117,37 +121,15 @@ public struct ControllerRecord: Codable {
 // MARK: - Simple Configuration
 
 public struct DeviceConfig: Codable {
-    public let deviceId: DeviceID
+    public let deviceId: String
     public let createdAt: String
     public let keyFingerprint: String
     public let desktopName: String
 
-    public init(deviceId: DeviceID, createdAt: String, keyFingerprint: String, desktopName: String) {
+    public init(deviceId: String, createdAt: String, keyFingerprint: String, desktopName: String) {
         self.deviceId = deviceId
         self.createdAt = createdAt
         self.keyFingerprint = keyFingerprint
         self.desktopName = desktopName
-    }
-}
-
-// MARK: - Simple Error Types
-
-public enum PairingError: Error, LocalizedError {
-    case tokenExpired
-    case tokenInvalid
-    case deviceMismatch
-    case controllerAlreadyPaired
-
-    public var errorDescription: String? {
-        switch self {
-        case .tokenExpired:
-            return "Pairing token has expired"
-        case .tokenInvalid:
-            return "Invalid pairing token"
-        case .deviceMismatch:
-            return "Device ID mismatch"
-        case .controllerAlreadyPaired:
-            return "Controller is already paired"
-        }
     }
 }
