@@ -81,13 +81,11 @@ public struct PairResult: Codable {
     public let sid: String
     public let kind: String
     public let success: Bool
-    public let error: String?
 
-    public init(sid: String, kind: String, success: Bool, error: String? = nil) {
+    public init(sid: String, kind: String, success: Bool) {
         self.sid = sid
         self.kind = kind
         self.success = success
-        self.error = error
     }
 }
 
