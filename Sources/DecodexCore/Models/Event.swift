@@ -49,7 +49,7 @@ public enum CLIEvent: Equatable, Codable {
 public enum ControlMessage: Codable, Sendable {
     case message(String)
     case confirmation(ConfirmationResponse)
-    case pairRequest(PairRequest)
+    case pairResult(PairResult)
     case close
 }
 
@@ -75,7 +75,7 @@ public struct Message: Codable {
                 return nil
             case .confirmation(let confirmation):
                 return confirmation.outcome.rawValue
-            case .pairRequest:
+            case .pairResult(let result):
                 return "pair-request"
             }
         case .desktop(let event):

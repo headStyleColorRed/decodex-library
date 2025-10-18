@@ -13,12 +13,10 @@ import Foundation
 public struct DeskKey: Codable {
     public let publicKey: String
     public let privateKey: String
-    public let fingerprint: String
 
-    public init(publicKey: String, privateKey: String, fingerprint: String) {
+    public init(publicKey: String, privateKey: String) {
         self.publicKey = publicKey
         self.privateKey = privateKey
-        self.fingerprint = fingerprint
     }
 }
 
@@ -77,7 +75,7 @@ public struct PairRequest: Codable, Sendable {
     }
 }
 
-public struct PairResult: Codable {
+public struct PairResult: Codable, Sendable {
     public let sid: String
     public let kind: String
     public let success: Bool
@@ -121,13 +119,11 @@ public struct ControllerRecord: Codable {
 public struct DeviceConfig: Codable {
     public let deviceId: String
     public let createdAt: String
-    public let keyFingerprint: String
     public let desktopName: String
 
-    public init(deviceId: String, createdAt: String, keyFingerprint: String, desktopName: String) {
+    public init(deviceId: String, createdAt: String, desktopName: String) {
         self.deviceId = deviceId
         self.createdAt = createdAt
-        self.keyFingerprint = keyFingerprint
         self.desktopName = desktopName
     }
 }
