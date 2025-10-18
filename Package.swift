@@ -5,7 +5,7 @@ let package = Package(
     name: "decodex-library",
     platforms: [
         .macOS(.v14),
-        .iOS(.v16)
+        .iOS(.v17)
     ],
     products: [
         .library(
