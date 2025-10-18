@@ -21,25 +21,20 @@ public struct DeskKey: Codable {
 }
 
 // MARK: - Pairing QR Code
-
 public struct PairingQRData: Codable {
-    public let kind: String = "codec-pairing"
-    public let desktopID: String
-    public let desktopPublicKey: String
-    public let desktopName: String
-    public let oneTimePairingToken: String
-    public let expiration: String
+    let desktopPublicKey: String
+    let sessionToken: String
+    let relayURL: String
+    let desktopName: String
 
-    public init(desktopID: String,
-                desktopPublicKey: String,
-                desktopName: String,
-                oneTimePairingToken: String,
-                expiration: String) {
-        self.desktopID = desktopID
+    public init(desktopPublicKey: String,
+         sessionToken: String, 
+         relayURL: String, 
+         desktopName: String) {
         self.desktopPublicKey = desktopPublicKey
+        self.sessionToken = sessionToken
+        self.relayURL = relayURL
         self.desktopName = desktopName
-        self.oneTimePairingToken = oneTimePairingToken
-        self.expiration = expiration
     }
 
     public func toJSON() throws -> String {
