@@ -22,14 +22,14 @@ public struct DeskKey: Codable {
 
 // MARK: - Pairing QR Code
 public struct PairingQRData: Codable {
-    let desktopPublicKey: String
-    let sessionToken: String
-    let relayURL: String
-    let desktopName: String
+    public let desktopPublicKey: String
+    public let sessionToken: String
+    public let relayURL: String
+    public let desktopName: String
 
     public init(desktopPublicKey: String,
-         sessionToken: String, 
-         relayURL: String, 
+         sessionToken: String,
+         relayURL: String,
          desktopName: String) {
         self.desktopPublicKey = desktopPublicKey
         self.sessionToken = sessionToken
