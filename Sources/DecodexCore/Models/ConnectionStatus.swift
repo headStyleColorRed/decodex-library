@@ -6,5 +6,5 @@
 //
 
 public enum ConnectionStatus: Sendable {
-    case disconnected, connecting, connected, paired
+    case disconnected(Error? = nil), connecting, connected, paired
 }

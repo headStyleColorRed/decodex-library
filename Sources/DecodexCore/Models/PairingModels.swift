@@ -8,6 +8,9 @@
 import Foundation
 
 // MARK: - Simple Pairing Terminology
+public enum ChannelType {
+    case pairing, messaging
+}
 
 /// Simple desktop keypair - just strings for now
 public struct DeskKey: Codable {
@@ -35,6 +38,18 @@ public struct PairingQRData: Codable {
         self.sessionToken = sessionToken
         self.relayURL = relayURL
         self.desktopName = desktopName
+    }
+
+    public func getUrl(for type: ChannelType) -> URL? {
+        var url: String = "ws://192.168.1.168:8080"
+        switch type {
+        case .pairing:
+            url.append("/pair?device=\(sessionToken)&token=\(desktopPublicKey)&role=\(ConnectionRole.desktop.rawValue)")
+        case .messaging:
+            url.append("/ws?sid=\(sessionToken)&role=\(ConnectionRole.desktop.rawValue)")
+        }
+
+        return URL(string: url)
     }
 
     public func toJSON() throws -> String {
