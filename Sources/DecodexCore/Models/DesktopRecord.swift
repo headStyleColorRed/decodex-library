@@ -20,9 +20,9 @@ public final class DesktopRecord {
     public var addedAt: Date
     public var lastSeenAt: Date
     public var state: String?
-    public var pairingToken: String?
+    public var pairingToken: String
 
-    
+
     public init(from qrData: PairingQRData) {
         self.id = UUID().uuidString
 
