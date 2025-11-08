@@ -53,9 +53,16 @@ public enum ControlMessage: Codable, Sendable {
     case close
 }
 
+public enum ServerEvent: Codable, Sendable {
+    case connected(ConnectionRole)
+    case sessionExpired
+    case error(String)
+}
+
 public enum SenderData: Codable, Sendable {
     case controller(ControlMessage)
     case desktop(CLIEvent)
+    case server(ServerEvent)
 }
 
 public struct Message: Codable, Sendable {
@@ -96,6 +103,15 @@ public struct Message: Codable, Sendable {
                 return "Error: \(string)"
             case .loading(let string):
                 return "Loading: \(string)"
+            }
+        case .server(let event):
+            switch event {
+            case .connected(let role):
+                return "Server: Connected as \(role.rawValue)"
+            case .sessionExpired:
+                return "Server: Session expired"
+            case .error(let message):
+                return "Server Error: \(message)"
             }
         }
     }
