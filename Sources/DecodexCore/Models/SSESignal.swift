@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct SSESignal: Codable {
+public struct SSESignal: Codable, Sendable {
     public let phase: SignalPhase
     public let text: String?
     public let confirmation: ConfirmationPayload?

@@ -7,8 +7,8 @@
 
 import Foundation
 
-public struct ConfirmationPayload: Codable {
-    public enum Kind: String, Codable { case exec, edit }
+public struct ConfirmationPayload: Codable, Sendable {
+    public enum Kind: String, Codable, Sendable { case exec, edit }
     public let kind: Kind
     public let title: String
     public let details: [String : String]

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum SignalPhase: String, Codable {
+public enum SignalPhase: String, Codable, Sendable {
     case ready
     case thinking
     case answer

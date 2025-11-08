@@ -14,7 +14,7 @@ public enum Model: String, CaseIterable, Codable, Sendable {
 }
 
 
-public enum CLIEvent: Equatable, Codable {
+public enum CLIEvent: Equatable, Codable, Sendable {
     case none
     case loading(String)                    // Loading
     case launching                          // Launching the llm process
@@ -49,7 +49,7 @@ public enum CLIEvent: Equatable, Codable {
 public enum ControlMessage: Codable, Sendable {
     case message(String)
     case confirmation(ConfirmationResponse)
-    case pairResult(PairResult)
+    case pairing(UUID?)
     case close
 }
 
@@ -75,8 +75,8 @@ public struct Message: Codable {
                 return nil
             case .confirmation(let confirmation):
                 return confirmation.outcome.rawValue
-            case .pairResult(let result):
-                return "pair-request"
+            case .pairing(let conversationID):
+                return conversationID?.uuidString ?? "no-id"
             }
         case .desktop(let event):
             switch event {
