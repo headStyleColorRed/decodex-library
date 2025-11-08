@@ -53,12 +53,12 @@ public enum ControlMessage: Codable, Sendable {
     case close
 }
 
-public enum SenderData: Codable {
+public enum SenderData: Codable, Sendable {
     case controller(ControlMessage)
     case desktop(CLIEvent)
 }
 
-public struct Message: Codable {
+public struct Message: Codable, Sendable {
     public let data: SenderData
 
     public init(data: SenderData) {
