@@ -47,10 +47,10 @@ public enum CLIEvent: Equatable, Codable, Sendable {
 }
 
 public struct ControlMessage: Codable, Sendable {
-    public let taskId: String
+    public let taskId: String?
     public let message: String
 
-    public init(taskId: String, message: String) {
+    public init(taskId: String? = nil, message: String) {
         self.taskId = taskId
         self.message = message
     }
