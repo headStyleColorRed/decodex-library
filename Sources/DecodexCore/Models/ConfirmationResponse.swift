@@ -8,10 +8,12 @@
 import Foundation
 
 public struct ConfirmationResponse: Codable, Sendable {
+    public let taskId: String
     public let callId: String
     public let outcome: ConfirmationOutcome
 
-    public init(callId: String, outcome: ConfirmationOutcome) {
+    public init(taskId: String, callId: String, outcome: ConfirmationOutcome) {
+        self.taskId = taskId
         self.callId = callId
         self.outcome = outcome
     }

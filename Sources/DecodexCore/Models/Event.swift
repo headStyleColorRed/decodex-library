@@ -46,10 +46,19 @@ public enum CLIEvent: Equatable, Codable, Sendable {
     }
 }
 
-public enum ControlMessage: Codable, Sendable {
-    case message(String)
+public struct ControlMessage: Codable, Sendable {
+    public let taskId: String
+    public let message: String
+
+    public init(taskId: String, message: String) {
+        self.taskId = taskId
+        self.message = message
+    }
+}
+
+public enum ControlEvent: Codable, Sendable {
+    case message(ControlMessage)
     case confirmation(ConfirmationResponse)
-    case pairing(UUID?)
     case close
 }
 
@@ -60,7 +69,7 @@ public enum ServerEvent: Codable, Sendable {
 }
 
 public enum SenderData: Codable, Sendable {
-    case controller(ControlMessage)
+    case controller(ControlEvent)
     case desktop(CLIEvent)
     case server(ServerEvent)
 }
@@ -70,49 +79,5 @@ public struct Message: Codable, Sendable {
 
     public init(data: SenderData) {
         self.data = data
-    }
-
-    public var content: String? {
-        switch data {
-        case .controller(let message):
-            switch message {
-            case .message(let string):
-                return string
-            case .close:
-                return nil
-            case .confirmation(let confirmation):
-                return confirmation.outcome.rawValue
-            case .pairing(let conversationID):
-                return conversationID?.uuidString ?? "no-id"
-            }
-        case .desktop(let event):
-            switch event {
-            case .none:
-                return "None"
-            case .launching:
-                return "Launching"
-            case .authorizing:
-                return "Authorizing"
-            case .event(let event):
-                return "Event: \(event)"
-            case .disconnected:
-                return "Disconnected"
-            case .currentDirectory(let string):
-                return "Current Directory: \(string)"
-            case .error(let string):
-                return "Error: \(string)"
-            case .loading(let string):
-                return "Loading: \(string)"
-            }
-        case .server(let event):
-            switch event {
-            case .connected(let role):
-                return "Server: Connected as \(role.rawValue)"
-            case .sessionExpired:
-                return "Server: Session expired"
-            case .error(let message):
-                return "Server Error: \(message)"
-            }
-        }
     }
 }
