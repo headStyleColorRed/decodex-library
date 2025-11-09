@@ -22,7 +22,7 @@ public struct SSESignal: Codable, Sendable {
                 text: String? = nil,
                 confirmation: ConfirmationPayload? = nil,
                 taskId: String? = nil,
-                contextId: String?,
+                contextId: String? = nil,
                 messageId: String? = nil,
                 callId: String? = nil,
                 final: Bool = false,

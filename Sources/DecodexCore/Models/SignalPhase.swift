@@ -11,6 +11,7 @@ public enum SignalPhase: String, Codable, Sendable {
     case ready
     case thinking
     case answer
+    case finishedAnswer
     case needInput
     case error
     case none
